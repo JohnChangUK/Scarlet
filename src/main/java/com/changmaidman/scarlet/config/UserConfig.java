@@ -2,7 +2,6 @@ package com.changmaidman.scarlet.config;
 
 import com.changmaidman.scarlet.model.Match;
 import com.changmaidman.scarlet.model.User;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -12,11 +11,10 @@ import java.util.List;
 import static com.changmaidman.scarlet.util.Utils.*;
 
 @Configuration
-@EnableAutoConfiguration
 public class UserConfig {
 
     @Bean
-    public static List<User> usersList() {
+    public List<User> usersList() {
         List<User> usersList = new ArrayList<>();
         usersList.add(createUser("1", "John", new ArrayList<>()));
         usersList.add(createUser("2", "Joe", new ArrayList<>()));

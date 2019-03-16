@@ -1,10 +1,9 @@
 package com.changmaidman.scarlet.service;
 
-import com.changmaidman.scarlet.config.UserConfig;
 import com.changmaidman.scarlet.exception.UserDoesNotExistException;
 import com.changmaidman.scarlet.model.Match;
 import com.changmaidman.scarlet.model.User;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,8 +18,12 @@ import static com.changmaidman.scarlet.util.Utils.USER_DOES_NOT_EXIST;
 @Service
 public class UserService {
 
-    @Qualifier("usersList")
-    private List<User> usersList = UserConfig.usersList();
+    private final List<User> usersList;
+
+    @Autowired
+    public UserService(List<User> usersList) {
+        this.usersList = usersList;
+    }
 
     public List<User> getAllUsers() {
         return usersList;
