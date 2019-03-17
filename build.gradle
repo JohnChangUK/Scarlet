@@ -2,7 +2,6 @@ buildscript {
     ext {
         springBootVersion = '2.1.3.RELEASE'
         lombokVersion = '1.18.6'
-        classGraphVersion = '4.8.14'
         reflectionsVersion = '0.9.11'
         mockitoVersion = '2.1.0'
     }
@@ -35,8 +34,7 @@ repositories {
 dependencies {
     compile 'org.springframework.boot:spring-boot-starter-web',
             "org.projectlombok:lombok:$lombokVersion",
-            "org.reflections:reflections:$reflectionsVersion",
-            "io.github.classgraph:classgraph:$classGraphVersion"
+            "org.reflections:reflections:$reflectionsVersion"
 
     testCompile "junit:junit:4.12",
             "org.mockito:mockito-core:$mockitoVersion",

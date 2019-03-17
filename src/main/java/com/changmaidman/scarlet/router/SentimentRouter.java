@@ -28,12 +28,15 @@ public abstract class SentimentRouter {
     void process(Class<? extends Annotation> annotation, Class<? extends Sentiment> sentimentClass) {
         Reflections reflections = new Reflections(new ConfigurationBuilder()
                 .setUrls(ClasspathHelper.forPackage("com.changmaidman.scarlet"))
-                .setScanners(new MethodAnnotationsScanner(), new TypeAnnotationsScanner(),
+                .setScanners(new MethodAnnotationsScanner(),
+                        new TypeAnnotationsScanner(),
                         new SubTypesScanner())
-                .filterInputsBy(new FilterBuilder().excludePackage("com.changmaidman.scarlet.test")));
+                .filterInputsBy(new FilterBuilder()
+                        .excludePackage("com.changmaidman.scarlet.test")));
 
         Set<Method> handlerMethods = reflections.getMethodsAnnotatedWith(annotation);
-        Optional<? extends Class<?>> classOfMethod = reflections.getMethodsAnnotatedWith(annotation)
+        Optional<? extends Class<?>> classOfMethod = reflections
+                .getMethodsAnnotatedWith(annotation)
                 .stream()
                 .map(Method::getDeclaringClass)
                 .findFirst();
