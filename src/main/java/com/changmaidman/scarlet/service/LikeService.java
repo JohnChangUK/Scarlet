@@ -19,6 +19,6 @@ public class LikeService {
 
     @DislikeHandler
     public void processDislike() {
-        System.out.println("Like handler");
+        System.out.println("Dislike handler");
     }
 }

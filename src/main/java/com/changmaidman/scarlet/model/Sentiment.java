@@ -6,5 +6,5 @@ import lombok.Data;
 
 @AllArgsConstructor
 @Data
-public abstract class Sentiment {
+public class Sentiment {
 }
