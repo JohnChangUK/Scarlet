@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -23,7 +24,8 @@ import java.util.Set;
 public abstract class SentimentRouter {
     private static final Logger log = LoggerFactory.getLogger(SentimentRouter.class);
 
-    Map<Class<? extends Sentiment>, Method> sentimentRegistry;
+    Map<Class<? extends Sentiment>, List<Method>> sentimentRegistry;
+    List<Method> methodList;
 
     void process(Class<? extends Annotation> annotation, Class<? extends Sentiment> sentimentClass) {
         Reflections reflections = new Reflections(new ConfigurationBuilder()
@@ -44,7 +46,8 @@ public abstract class SentimentRouter {
         for (Method method : handlerMethods) {
             try {
                 if (classOfMethod.isPresent()) {
-                    sentimentRegistry.put(sentimentClass, method);
+                    methodList.add(method);
+                    sentimentRegistry.put(sentimentClass, methodList);
                     Object newClass = classOfMethod.get().newInstance();
                     method.invoke(newClass);
                 }

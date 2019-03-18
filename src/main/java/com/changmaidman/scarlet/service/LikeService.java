@@ -17,8 +17,28 @@ public class LikeService {
         System.out.println("Like handler");
     }
 
+    @LikeHandler
+    public void process2() {
+        System.out.println("Like handler2");
+    }
+
+    @LikeHandler
+    public void process3() {
+        System.out.println("Like handler3");
+    }
+
     @DislikeHandler
     public void processDislike() {
         System.out.println("Dislike handler");
+    }
+
+    @DislikeHandler
+    public void processDislike2() {
+        System.out.println("Dislike handler2");
+    }
+
+    @DislikeHandler
+    public void processDislike3() {
+        System.out.println("Dislike handler3");
     }
 }

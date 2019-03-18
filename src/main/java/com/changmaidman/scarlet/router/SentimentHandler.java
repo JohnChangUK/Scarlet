@@ -3,13 +3,14 @@ package com.changmaidman.scarlet.router;
 import com.changmaidman.scarlet.model.Sentiment;
 
 import java.lang.reflect.Method;
+import java.util.List;
 
 public class SentimentHandler {
 
     private final Class<? extends Sentiment> sentiment;
-    private final Method method;
+    private final List<Method> method;
 
-    public SentimentHandler(Class<? extends Sentiment> sentiment, Method method) {
+    public SentimentHandler(Class<? extends Sentiment> sentiment, List<Method> method) {
         this.sentiment = sentiment;
         this.method = method;
     }
@@ -18,7 +19,7 @@ public class SentimentHandler {
         return sentiment;
     }
 
-    public Method getMethod() {
+    public List<Method> getMethod() {
         return method;
     }
 }

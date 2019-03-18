@@ -3,6 +3,7 @@ package com.changmaidman.scarlet.router;
 import com.changmaidman.scarlet.annotation.LikeHandler;
 import com.changmaidman.scarlet.model.Like;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class LikeRouter extends SentimentRouter {
@@ -11,6 +12,7 @@ public class LikeRouter extends SentimentRouter {
 
     private LikeRouter() {
         this.sentimentRegistry = new HashMap<>();
+        this.methodList = new ArrayList<>();
         process(LikeHandler.class, Like.class);
     }
 }
