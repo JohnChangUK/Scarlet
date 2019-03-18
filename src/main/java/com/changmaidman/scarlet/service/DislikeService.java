@@ -1,50 +1,34 @@
 package com.changmaidman.scarlet.service;
 
 import com.changmaidman.scarlet.annotation.DislikeHandler;
-import com.changmaidman.scarlet.annotation.LikeHandler;
-import com.changmaidman.scarlet.model.Sentiment;
-import com.changmaidman.scarlet.model.User;
-import com.changmaidman.scarlet.router.LikeRouter;
-import com.changmaidman.scarlet.router.SentimentHandler;
+import com.changmaidman.scarlet.router.DislikeRouter;
+import com.changmaidman.scarlet.router.SentimentPairHandler;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.List;
-import java.util.Map;
+import java.util.HashMap;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 @Service
+@Qualifier("dislikeService")
 public class DislikeService extends SentimentService {
 
-    Map<Integer, User> likesMap;
-
-    public CompletableFuture<Void> processLike(Sentiment sentiment) {
-        Optional<SentimentHandler> likeHandler = LikeRouter.INSTANCE.getSentimentHandler(sentiment);
-
-        return likeHandler
-                .map(sentimentHandler ->
-                        CompletableFuture.runAsync(() -> invokeLikeHandler(sentiment, sentimentHandler)))
-                .orElseGet(() -> CompletableFuture.completedFuture(null));
+    public DislikeService() {
+        this.likesMap = new HashMap<>();
     }
 
-    private void invokeLikeHandler(Sentiment sentiment, SentimentHandler sentimentHandler) {
-        Class<? extends Sentiment> likeSentiment = sentimentHandler.getSentiment();
-        List<Method> likeMethods = sentimentHandler.getMethod();
+    @Override
+    public CompletableFuture<Void> processSentiment(SentimentService service) {
 
-        try {
-            Object newClass = likeSentiment.newInstance();
-            likeMethods.forEach(method -> {
-                try {
-                    method.invoke(newClass);
-                } catch (IllegalAccessException | InvocationTargetException e) {
-                    e.printStackTrace();
-                }
-            });
-        } catch (InstantiationException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
+        Optional<SentimentPairHandler> sentimentHandler =
+                DislikeRouter.INSTANCE.getRegistryHandler(service);
+
+        return sentimentHandler
+                .map(handler ->
+                        CompletableFuture.runAsync(() ->
+                                invokeSentimentHandler(handler)))
+                .orElseGet(() -> CompletableFuture.completedFuture(null));
     }
 
     @DislikeHandler
@@ -56,4 +40,5 @@ public class DislikeService extends SentimentService {
     public void process2() {
         System.out.println("Dislike handler2");
     }
+
 }

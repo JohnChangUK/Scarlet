@@ -5,10 +5,11 @@ import java.util.List;
 import com.changmaidman.scarlet.exception.UserDoesNotExistException;
 import com.changmaidman.scarlet.model.Match;
 import com.changmaidman.scarlet.model.User;
-import com.changmaidman.scarlet.service.LikeService;
+import com.changmaidman.scarlet.service.SentimentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -28,12 +29,16 @@ public class ScarletController {
     private static final Logger log = LoggerFactory.getLogger(ScarletController.class);
 
     private final UserService userService;
-    private final LikeService likeService;
+    private final SentimentService likeService;
+    private final SentimentService dislikeService;
 
     @Autowired
-    public ScarletController(UserService userService, LikeService likeService) {
+    public ScarletController(UserService userService,
+                             @Qualifier("likeService") SentimentService likeService,
+                             @Qualifier("dislikeService") SentimentService dislikeService) {
         this.userService = userService;
         this.likeService = likeService;
+        this.dislikeService = dislikeService;
     }
 
     @GetMapping(value = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -68,11 +73,21 @@ public class ScarletController {
         return new ResponseEntity<>(userService.getUserMatches(id), HttpStatus.OK);
     }
 
-    @PostMapping(value = "/user/{id}?like={otherUserId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Match>> getUserMatches(
+    @PostMapping(value = "/user/{id}/like", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Match>> likeUser(
             @PathVariable(value = "id") String id,
-            @RequestParam(value = "otherUserId") String otherUserId) {
+            @RequestParam(value = "like") String otherUserId) {
 
+        likeService.processSentiment(likeService);
         return new ResponseEntity<>(userService.getUserMatches(id), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/user/{id}/dislike", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<User> dislikeUser(
+            @PathVariable(value = "id") String id,
+            @RequestParam(value = "dislike") String otherUserId) throws UserDoesNotExistException {
+
+        dislikeService.processSentiment(dislikeService);
+        return new ResponseEntity<>(userService.getUser(id), HttpStatus.OK);
     }
 }
