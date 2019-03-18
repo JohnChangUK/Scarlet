@@ -32,12 +32,22 @@ public class LikeService extends SentimentService {
     }
 
     @LikeHandler
-    public void process() {
-        System.out.println("Like handler");
+    public void processLike() {
+        System.out.println("Process like");
     }
 
     @LikeHandler
-    public void process2() {
-        System.out.println("Like handler2");
+    public void processSuperLike() {
+        System.out.println("Process super like");
+    }
+
+    @LikeHandler
+    public void storeLikeInDatabase() {
+        System.out.println("Like action stored in database");
+    }
+
+    @LikeHandler
+    public void storeSuperLikeInDatabase() {
+        System.out.println("Super like action stored in database");
     }
 }

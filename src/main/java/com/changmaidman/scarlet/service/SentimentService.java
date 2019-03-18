@@ -19,7 +19,7 @@ public abstract class SentimentService {
     public abstract void processSentiment(SentimentService service);
 
     void invokeSentimentHandler(SentimentPairHandler sentimentPairHandler) {
-        Class<?> sentiment = sentimentPairHandler.getSentimentService();
+        Class<?> sentiment = sentimentPairHandler.getClazz();
         List<Method> methodList = sentimentPairHandler.getMethod();
 
         try {

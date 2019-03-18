@@ -5,16 +5,16 @@ import java.util.List;
 
 public class SentimentPairHandler {
 
-    private final Class<?> sentimentService;
+    private final Class<?> clazz;
     private final List<Method> method;
 
-    public SentimentPairHandler(Class<?> sentimentService, List<Method> method) {
-        this.sentimentService = sentimentService;
+    SentimentPairHandler(Class<?> clazz, List<Method> method) {
+        this.clazz = clazz;
         this.method = method;
     }
 
-    public Class<?> getSentimentService() {
-        return sentimentService;
+    public Class<?> getClazz() {
+        return clazz;
     }
 
     public List<Method> getMethod() {

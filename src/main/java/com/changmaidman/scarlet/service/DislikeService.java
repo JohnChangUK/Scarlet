@@ -32,13 +32,12 @@ public class DislikeService extends SentimentService {
     }
 
     @DislikeHandler
-    public void process() {
-        System.out.println("Dislike handler");
+    public void processDislike() {
+        System.out.println("Dislike handler invoked");
     }
 
     @DislikeHandler
-    public void process2() {
-        System.out.println("Dislike handler2");
+    public void storeDislikeInDatabase() {
+        System.out.println("Dislike action stored in database");
     }
-
 }
