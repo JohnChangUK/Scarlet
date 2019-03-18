@@ -19,12 +19,12 @@ public class DislikeService extends SentimentService {
     }
 
     @Override
-    public CompletableFuture<Void> processSentiment(SentimentService service) {
+    public void processSentiment(SentimentService service) {
 
         Optional<SentimentPairHandler> sentimentHandler =
                 DislikeRouter.INSTANCE.getRegistryHandler(service);
 
-        return sentimentHandler
+        sentimentHandler
                 .map(handler ->
                         CompletableFuture.runAsync(() ->
                                 invokeSentimentHandler(handler)))
