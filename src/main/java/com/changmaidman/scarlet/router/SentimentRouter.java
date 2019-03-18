@@ -57,17 +57,17 @@ public abstract class SentimentRouter {
         }
     }
 
-    Optional<SentimentHandler> getSentimentHandler(Class<? extends Sentiment> sentiment) {
+    Optional<SentimentHandler> getSentimentHandler(Sentiment sentiment) {
         return sentimentRegistry.keySet()
                 .stream()
-                .filter(classType -> classType.getCanonicalName().equals(sentiment.getCanonicalName()))
+                .filter(classType -> classType.isInstance(sentiment))
                 .map(classType -> new SentimentHandler(classType, sentimentRegistry.get(classType)))
                 .findFirst();
     }
 
     public static void main(String[] args) {
-        Optional<SentimentHandler> likeHandler = LikeRouter.INSTANCE.getSentimentHandler(Like.class);
-        Optional<SentimentHandler> dislikeHandler = DislikeRouter.INSTANCE.getSentimentHandler(Dislike.class);
+        Optional<SentimentHandler> likeHandler = LikeRouter.INSTANCE.getSentimentHandler(new Like());
+        Optional<SentimentHandler> dislikeHandler = DislikeRouter.INSTANCE.getSentimentHandler(new Dislike());
         likeHandler.ifPresent(handler -> System.out.println(handler.getSentiment()));
         likeHandler.ifPresent(handler -> System.out.println(handler.getMethod()));
         dislikeHandler.ifPresent(handler -> System.out.println(handler.getSentiment()));
