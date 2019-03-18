@@ -13,6 +13,7 @@ public class DislikeRouter extends SentimentRouter {
     private DislikeRouter() {
         this.sentimentRegistry = new HashMap<>();
         this.methodList = new ArrayList<>();
+        this.registry = new HashMap<>();
         process(DislikeHandler.class, Dislike.class);
     }
 }

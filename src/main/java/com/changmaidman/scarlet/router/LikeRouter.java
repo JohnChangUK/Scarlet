@@ -8,11 +8,12 @@ import java.util.HashMap;
 
 public class LikeRouter extends SentimentRouter {
 
-    static final LikeRouter INSTANCE = new LikeRouter();
+    public static final LikeRouter INSTANCE = new LikeRouter();
 
     private LikeRouter() {
         this.sentimentRegistry = new HashMap<>();
         this.methodList = new ArrayList<>();
+        this.registry = new HashMap<>();
         process(LikeHandler.class, Like.class);
     }
 }

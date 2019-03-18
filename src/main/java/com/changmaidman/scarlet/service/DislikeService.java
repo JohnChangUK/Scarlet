@@ -2,7 +2,6 @@ package com.changmaidman.scarlet.service;
 
 import com.changmaidman.scarlet.annotation.DislikeHandler;
 import com.changmaidman.scarlet.annotation.LikeHandler;
-import com.changmaidman.scarlet.model.Like;
 import com.changmaidman.scarlet.model.Sentiment;
 import com.changmaidman.scarlet.model.User;
 import com.changmaidman.scarlet.router.LikeRouter;
@@ -17,7 +16,7 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 @Service
-public class LikeService extends SentimentService {
+public class DislikeService extends SentimentService {
 
     Map<Integer, User> likesMap;
 
@@ -48,13 +47,13 @@ public class LikeService extends SentimentService {
         }
     }
 
-    @LikeHandler
+    @DislikeHandler
     public void process() {
-        System.out.println("Like handler");
+        System.out.println("Dislike handler");
     }
 
-    @LikeHandler
+    @DislikeHandler
     public void process2() {
-        System.out.println("Like handler2");
+        System.out.println("Dislike handler2");
     }
 }
