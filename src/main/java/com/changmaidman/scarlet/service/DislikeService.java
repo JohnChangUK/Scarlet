@@ -1,14 +1,13 @@
 package com.changmaidman.scarlet.service;
 
-import com.changmaidman.scarlet.annotation.DislikeHandler;
+import com.changmaidman.scarlet.model.SentimentRegistry;
 import com.changmaidman.scarlet.model.User;
 import com.changmaidman.scarlet.router.DislikeRouter;
-import com.changmaidman.scarlet.router.SentimentPairHandler;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 @Service
@@ -23,23 +22,12 @@ public class DislikeService extends SentimentService {
     @Override
     public void processSentiment(SentimentService service) {
 
-        Optional<SentimentPairHandler> sentimentHandler =
-                DislikeRouter.INSTANCE.getRegistryHandler(service);
+        List<SentimentRegistry> sentimentRegistryList =
+                DislikeRouter.INSTANCE.getSentimentRegistry();
 
-        sentimentHandler
-                .map(handler ->
+        sentimentRegistryList
+                .forEach(sentimentRegistry ->
                         CompletableFuture.runAsync(() ->
-                                invokeSentimentHandler(handler)))
-                .orElseGet(() -> CompletableFuture.completedFuture(null));
-    }
-
-    @DislikeHandler
-    public void processDislike() {
-        System.out.println("Dislike handler invoked");
-    }
-
-    @DislikeHandler
-    public void storeDislikeInDatabase() {
-        System.out.println("Dislike action stored in database");
+                                invokeSentimentRegistry(sentimentRegistry)));
     }
 }

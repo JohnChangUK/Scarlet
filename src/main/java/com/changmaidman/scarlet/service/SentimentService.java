@@ -1,5 +1,6 @@
 package com.changmaidman.scarlet.service;
 
+import com.changmaidman.scarlet.model.SentimentRegistry;
 import com.changmaidman.scarlet.router.SentimentPairHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +14,22 @@ public abstract class SentimentService {
     private static final Logger log = LoggerFactory.getLogger(SentimentService.class);
 
     public abstract void processSentiment(SentimentService service);
+
+    void invokeSentimentRegistry(SentimentRegistry registry) {
+        Class<?> sentiment = registry.getClazz();
+        Method method = registry.getMethod();
+
+        try {
+            Object newClass = sentiment.newInstance();
+                try {
+                    method.invoke(newClass);
+                } catch (IllegalAccessException | InvocationTargetException e) {
+                    log.error("Error: ", e);
+                }
+        } catch (InstantiationException | IllegalAccessException e) {
+            log.error("Error: ", e);
+        }
+    }
 
     void invokeSentimentHandler(SentimentPairHandler sentimentPairHandler) {
         Class<?> sentiment = sentimentPairHandler.getClazz();

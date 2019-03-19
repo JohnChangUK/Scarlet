@@ -1,5 +1,6 @@
 package com.changmaidman.scarlet.router;
 
+import com.changmaidman.scarlet.model.SentimentRegistry;
 import com.changmaidman.scarlet.service.SentimentService;
 import org.reflections.Reflections;
 import org.reflections.scanners.MethodAnnotationsScanner;
@@ -13,11 +14,9 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public abstract class SentimentRouter {
@@ -26,6 +25,7 @@ public abstract class SentimentRouter {
 
     Map<Class<?>, List<Method>> sentimentRegistry;
     List<Method> methodList;
+    private List<SentimentRegistry> classOfMethod;
 
     void process(Class<? extends Annotation> annotation) {
         Reflections reflections = new Reflections(
@@ -38,36 +38,16 @@ public abstract class SentimentRouter {
                                 new FilterBuilder()
                                         .excludePackage("com.changmaidman.scarlet.test")));
 
-        Set<Method> handlerMethods = reflections.getMethodsAnnotatedWith(annotation);
-
-        List<Class<?>> classOfMethod = reflections
+        classOfMethod = reflections
                 .getMethodsAnnotatedWith(annotation)
                 .stream()
-                .map(Method::getDeclaringClass)
+                .map(method -> new SentimentRegistry(
+                        method.getDeclaringClass(), method))
                 .collect(Collectors.toList());
+    }
 
-//        methodList.addAll(handlerMethods);
-
-        for (Method method : methodList) {
-            for (Class clazz : classOfMethod) {
-                if (method.getDeclaringClass().getCanonicalName().equals(clazz.getCanonicalName())) {
-                    methodList = new ArrayList<>();
-                    methodList.add(method);
-                    sentimentRegistry.put(clazz, methodList);
-                }
-
-            }
-            classOfMethod.forEach(clazz ->
-                    sentimentRegistry.put(clazz, ));
-        }
-
-        classOfMethod.forEach(clazz ->
-                sentimentRegistry.put(clazz,
-                        methodList.stream()
-                                .filter(method ->
-                                        method.getDeclaringClass()
-                                                .getCanonicalName()
-                                                .equals(clazz.getCanonicalName())).findFirst()));
+    public List<SentimentRegistry> getSentimentRegistry() {
+        return classOfMethod;
     }
 
     public Optional<SentimentPairHandler> getRegistryHandler(SentimentService service) {

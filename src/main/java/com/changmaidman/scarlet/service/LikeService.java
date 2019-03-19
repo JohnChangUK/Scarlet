@@ -1,12 +1,15 @@
 package com.changmaidman.scarlet.service;
 
 import com.changmaidman.scarlet.annotation.LikeHandler;
+import com.changmaidman.scarlet.model.SentimentRegistry;
 import com.changmaidman.scarlet.model.User;
 import com.changmaidman.scarlet.router.LikeRouter;
 import com.changmaidman.scarlet.router.SentimentPairHandler;
+import com.changmaidman.scarlet.router.SentimentRouter;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
@@ -23,23 +26,12 @@ public class LikeService extends SentimentService {
     @Override
     public void processSentiment(SentimentService service) {
 
-        Optional<SentimentPairHandler> sentimentHandler =
-                LikeRouter.INSTANCE.getRegistryHandler(service);
+        List<SentimentRegistry> sentimentRegistryList =
+                LikeRouter.INSTANCE.getSentimentRegistry();
 
-        sentimentHandler
-                .map(handler ->
+        sentimentRegistryList
+                .forEach(sentimentRegistry ->
                         CompletableFuture.runAsync(() ->
-                                invokeSentimentHandler(handler)))
-                .orElseGet(() -> CompletableFuture.completedFuture(null));
-    }
-//
-//    @LikeHandler
-//    public void processLike() {
-//        System.out.println("Process like");
-//    }
-
-    @LikeHandler
-    public void storeLikeInDatabase() {
-        System.out.println("Like action stored in database");
+                                invokeSentimentRegistry(sentimentRegistry)));
     }
 }
