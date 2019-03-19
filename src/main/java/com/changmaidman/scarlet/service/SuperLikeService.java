@@ -1,9 +1,9 @@
 package com.changmaidman.scarlet.service;
 
-import com.changmaidman.scarlet.annotation.LikeHandler;
+import com.changmaidman.scarlet.annotation.SuperLikeHandler;
 import com.changmaidman.scarlet.model.User;
-import com.changmaidman.scarlet.router.LikeRouter;
 import com.changmaidman.scarlet.router.SentimentPairHandler;
+import com.changmaidman.scarlet.router.SuperLikeRouter;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -12,19 +12,19 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 @Service
-public class LikeService extends SentimentService {
+public class SuperLikeService extends SentimentService {
 
-    private Map<Integer, User> likesMap;
+    private Map<Integer, User> superLikesMap;
 
-    public LikeService() {
-        this.likesMap = new HashMap<>();
+    public SuperLikeService() {
+        this.superLikesMap = new HashMap<>();
     }
 
     @Override
     public void processSentiment(SentimentService service) {
 
         Optional<SentimentPairHandler> sentimentHandler =
-                LikeRouter.INSTANCE.getRegistryHandler(service);
+                SuperLikeRouter.INSTANCE.getRegistryHandler(service);
 
         sentimentHandler
                 .map(handler ->
@@ -32,14 +32,14 @@ public class LikeService extends SentimentService {
                                 invokeSentimentHandler(handler)))
                 .orElseGet(() -> CompletableFuture.completedFuture(null));
     }
-//
-//    @LikeHandler
-//    public void processLike() {
-//        System.out.println("Process like");
-//    }
 
-    @LikeHandler
-    public void storeLikeInDatabase() {
-        System.out.println("Like action stored in database");
+    @SuperLikeHandler
+    public void processSuperLike() {
+        System.out.println("Process super like");
+    }
+
+    @SuperLikeHandler
+    public void storeSuperLikeInDatabase() {
+        System.out.println("Super like action stored in database");
     }
 }

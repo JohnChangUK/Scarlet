@@ -30,14 +30,17 @@ public class ScarletController {
 
     private final UserService userService;
     private final SentimentService likeService;
+    private final SentimentService superLikeService;
     private final SentimentService dislikeService;
 
     @Autowired
     public ScarletController(UserService userService,
-                             @Qualifier("likeService") SentimentService likeService,
-                             @Qualifier("dislikeService") SentimentService dislikeService) {
+                             SentimentService likeService,
+                             SentimentService superLikeService,
+                             SentimentService dislikeService) {
         this.userService = userService;
         this.likeService = likeService;
+        this.superLikeService = superLikeService;
         this.dislikeService = dislikeService;
     }
 
@@ -79,6 +82,15 @@ public class ScarletController {
             @RequestParam(value = "like") String otherUserId) {
 
         likeService.processSentiment(likeService);
+        return new ResponseEntity<>(userService.getUserMatches(id), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/user/{id}/superLike", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Match>> superLikeUser(
+            @PathVariable(value = "id") String id,
+            @RequestParam(value = "superLike") String otherUserId) {
+
+        superLikeService.processSentiment(superLikeService);
         return new ResponseEntity<>(userService.getUserMatches(id), HttpStatus.OK);
     }
 

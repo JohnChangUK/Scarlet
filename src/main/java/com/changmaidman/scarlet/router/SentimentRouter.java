@@ -13,51 +13,69 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public abstract class SentimentRouter {
 
     private static final Logger log = LoggerFactory.getLogger(SentimentRouter.class);
 
-    Map<Optional<? extends Class<?>>, List<Method>> sentimentRegistry;
+    Map<Class<?>, List<Method>> sentimentRegistry;
     List<Method> methodList;
 
     void process(Class<? extends Annotation> annotation) {
         Reflections reflections = new Reflections(
                 new ConfigurationBuilder()
-                .setUrls(ClasspathHelper.forPackage("com.changmaidman.scarlet"))
-                .setScanners(new MethodAnnotationsScanner(),
-                        new TypeAnnotationsScanner(),
-                        new SubTypesScanner())
-                .filterInputsBy(
-                        new FilterBuilder()
-                        .excludePackage("com.changmaidman.scarlet.test")));
+                        .setUrls(ClasspathHelper.forPackage("com.changmaidman.scarlet"))
+                        .setScanners(new MethodAnnotationsScanner(),
+                                new TypeAnnotationsScanner(),
+                                new SubTypesScanner())
+                        .filterInputsBy(
+                                new FilterBuilder()
+                                        .excludePackage("com.changmaidman.scarlet.test")));
 
         Set<Method> handlerMethods = reflections.getMethodsAnnotatedWith(annotation);
 
-        Optional<? extends Class<?>> classOfMethod = reflections
+        List<Class<?>> classOfMethod = reflections
                 .getMethodsAnnotatedWith(annotation)
                 .stream()
                 .map(Method::getDeclaringClass)
-                .findFirst();
+                .collect(Collectors.toList());
 
-        for (Method method : handlerMethods) {
-            if (classOfMethod.isPresent()) {
-                methodList.add(method);
-                sentimentRegistry.put(classOfMethod, methodList);
+//        methodList.addAll(handlerMethods);
+
+        for (Method method : methodList) {
+            for (Class clazz : classOfMethod) {
+                if (method.getDeclaringClass().getCanonicalName().equals(clazz.getCanonicalName())) {
+                    methodList = new ArrayList<>();
+                    methodList.add(method);
+                    sentimentRegistry.put(clazz, methodList);
+                }
+
             }
+            classOfMethod.forEach(clazz ->
+                    sentimentRegistry.put(clazz, ));
         }
+
+        classOfMethod.forEach(clazz ->
+                sentimentRegistry.put(clazz,
+                        methodList.stream()
+                                .filter(method ->
+                                        method.getDeclaringClass()
+                                                .getCanonicalName()
+                                                .equals(clazz.getCanonicalName())).findFirst()));
     }
 
     public Optional<SentimentPairHandler> getRegistryHandler(SentimentService service) {
         return sentimentRegistry.keySet()
                 .stream()
-                .filter(classType -> classType.get().isInstance(service))
+                .filter(classType -> classType.isInstance(service))
                 .map(classType -> new SentimentPairHandler(
-                        classType.get(), sentimentRegistry.get(classType)))
+                        classType, sentimentRegistry.get(classType)))
                 .findFirst();
     }
 }
