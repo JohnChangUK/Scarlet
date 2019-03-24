@@ -7,13 +7,12 @@ import lombok.Data;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.util.List;
 
 @AllArgsConstructor
 @Builder
 @Data
 //@Entity
-//@Table(name = "users", catalog = "test")
+@Table(name = "match", catalog = "test")
 public class Match {
 
     @Id

@@ -7,7 +7,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.Date;
 import java.util.List;
@@ -20,15 +23,17 @@ import java.util.List;
 public class Users {
 
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
     private String name;
     @Column(name = "date_of_birth")
     private String dateOfBirth;
     @Column(name = "biography")
     private String bio;
 //    private MultipartFile photos;
-//    private Match matches;
 
     public Users() {
     }
+
+
 }

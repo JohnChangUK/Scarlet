@@ -18,25 +18,21 @@ import java.util.stream.Stream;
 import static com.changmaidman.scarlet.util.Utils.USER_DOES_NOT_EXIST;
 
 @Service
-public class UserService {
+public class MatchService {
 
     private final List<User> usersList;
 
-    private final UsersRepository usersRepository;
+//    private final MatchRepository matchRepository;
 
     @Autowired
-    public UserService(List<User> usersList, UsersRepository usersRepository) {
+    public MatchService(List<User> usersList) {
         this.usersList = usersList;
-        this.usersRepository = usersRepository;
+//        this.matchRepository = matchRepository;
     }
 
-    public List<User> getAllUser() {
-        return usersList;
-    }
-
-    public List<Users> getAllUsers() {
-        return usersRepository.findAll();
-    }
+//    public List<Match> getAllMatches() {
+//        return matchRepository.findAll();
+//    }
 
     public List<MultipartFile> getUserPhotos(String id) {
         return usersList.stream()
@@ -50,41 +46,6 @@ public class UserService {
                 .filter(getUserByIdStream(id))
                 .flatMap(this::getUserMatchesStream)
                 .collect(Collectors.toList());
-    }
-
-    public List<Users> getUserByName(String name) {
-        return usersRepository.findByName(name);
-    }
-
-    public Users getUsersById(Integer id) throws UserDoesNotExistException {
-        Optional<Users> user = usersRepository.findById(id);
-        if (user.isPresent()) {
-            return user.get();
-        }
-
-        throw new UserDoesNotExistException(USER_DOES_NOT_EXIST);
-    }
-
-    public Users updateUserById(Integer id, String name) throws UserDoesNotExistException {
-        Optional<Users> user = usersRepository.findById(id);
-        if (user.isPresent()) {
-            user.get().setName(name);
-            return usersRepository.save(user.get());
-        }
-
-        throw new UserDoesNotExistException(USER_DOES_NOT_EXIST);
-    }
-
-    public User getUser(String id) throws UserDoesNotExistException {
-        Optional<User> user = usersList.stream()
-                .filter(getUserByIdStream(id))
-                .findFirst();
-
-        if (user.isPresent()) {
-            return user.get();
-        }
-
-        throw new UserDoesNotExistException(USER_DOES_NOT_EXIST);
     }
 
     private Stream<Match> getUserMatchesStream(User user) {

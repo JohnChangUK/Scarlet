@@ -60,14 +60,26 @@ public class UsersController {
     }
 
     @GetMapping(value = "/users/id/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Users> getUserById(@PathVariable(value = "id") String id) {
-        return new ResponseEntity<>(userService.getUsersById(id), HttpStatus.OK);
+    public ResponseEntity<Users> getUserById(@PathVariable(value = "id") Integer id) {
+        try {
+            return new ResponseEntity<>(userService.getUsersById(id), HttpStatus.OK);
+        } catch (UserDoesNotExistException e) {
+            log.error("Error: ", e);
+        }
+
+        return new ResponseEntity<>(new Users(), HttpStatus.NO_CONTENT);
     }
 
     @GetMapping(value = "/users/update/{id}/{name}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Users> updateUserById(@PathVariable("id") String id,
+    public ResponseEntity<Users> updateUserById(@PathVariable("id") Integer id,
                                                 @PathVariable("name") String name) {
-        return new ResponseEntity<>(userService.updateUserById(id, name), HttpStatus.OK);
+        try {
+            return new ResponseEntity<>(userService.updateUserById(id, name), HttpStatus.OK);
+        } catch (UserDoesNotExistException e) {
+            log.error("Error: ", e);
+        }
+
+        return new ResponseEntity<>(new Users(), HttpStatus.NO_CONTENT);
     }
 
     @GetMapping(value = "/user/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
