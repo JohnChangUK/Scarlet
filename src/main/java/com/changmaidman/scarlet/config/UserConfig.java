@@ -22,12 +22,12 @@ public class UserConfig {
         return usersList;
     }
 
-    @Bean
-    public List<Match> matches() {
-        List<Match> matches = new ArrayList<>();
-        matches.add(createMatch("11", createUser("6", "Julianna", new ArrayList<>())));
-        matches.add(createMatch("12", createUser("7", "Kim", new ArrayList<>())));
-        matches.add(createMatch("13", createUser("8", "Sally", new ArrayList<>())));
-        return matches;
-    }
+//    @Bean
+//    public List<Match> matches() {
+//        List<Match> matches = new ArrayList<>();
+//        matches.add(createMatch("11", createUser("6", "Julianna", new ArrayList<>())));
+//        matches.add(createMatch("12", createUser("7", "Kim", new ArrayList<>())));
+//        matches.add(createMatch("13", createUser("8", "Sally", new ArrayList<>())));
+//        return matches;
+//    }
 }

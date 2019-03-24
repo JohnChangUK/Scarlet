@@ -1,7 +1,5 @@
 package com.changmaidman.scarlet.model;
 
-import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,24 +9,26 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Date;
+import java.util.List;
 
 @AllArgsConstructor
 @Builder
 @Data
-public class User {
+@Entity
+@Table(name = "users", catalog = "test")
+public class Users {
 
+    @Id
     private String id;
     private String name;
+    @Column(name = "date_of_birth")
     private String dateOfBirth;
+    @Column(name = "biography")
     private String bio;
-    private List<MultipartFile> photos;
-    private List<Match> matches;
+//    private MultipartFile photos;
+//    private Match matches;
 
-    public void addMatch(Match match) {
-        matches.add(match);
-    }
-
-    private void addPhoto(MultipartFile photo) {
-        photos.add(photo);
+    public Users() {
     }
 }

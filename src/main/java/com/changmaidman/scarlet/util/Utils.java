@@ -2,6 +2,7 @@ package com.changmaidman.scarlet.util;
 
 import com.changmaidman.scarlet.model.Match;
 import com.changmaidman.scarlet.model.User;
+import com.changmaidman.scarlet.model.Users;
 
 import java.util.List;
 
@@ -18,10 +19,10 @@ public class Utils {
                 .build();
     }
 
-    public static Match createMatch(String id, User user) {
+    public static Match createMatch(String id, Users users) {
         return Match.builder()
                 .id(id)
-                .user(user)
+                .users(users)
                 .build();
     }
 }

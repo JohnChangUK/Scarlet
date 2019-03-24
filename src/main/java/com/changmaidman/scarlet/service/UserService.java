@@ -3,6 +3,8 @@ package com.changmaidman.scarlet.service;
 import com.changmaidman.scarlet.exception.UserDoesNotExistException;
 import com.changmaidman.scarlet.model.Match;
 import com.changmaidman.scarlet.model.User;
+import com.changmaidman.scarlet.model.Users;
+import com.changmaidman.scarlet.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,13 +22,20 @@ public class UserService {
 
     private final List<User> usersList;
 
+    private final UsersRepository usersRepository;
+
     @Autowired
-    public UserService(List<User> usersList) {
+    public UserService(List<User> usersList, UsersRepository usersRepository) {
         this.usersList = usersList;
+        this.usersRepository = usersRepository;
     }
 
-    public List<User> getAllUsers() {
+    public List<User> getAllUser() {
         return usersList;
+    }
+
+    public List<Users> getAllUsers() {
+        return usersRepository.findAll();
     }
 
     public List<MultipartFile> getUserPhotos(String id) {
@@ -41,6 +50,21 @@ public class UserService {
                 .filter(getUserByIdStream(id))
                 .flatMap(this::getUserMatchesStream)
                 .collect(Collectors.toList());
+    }
+
+    public List<Users> getUserByName(String name) {
+        return usersRepository.findByName(name);
+    }
+
+    public Users getUsersById(String id) {
+        return usersRepository.findById(id);
+    }
+
+    public Users updateUserById(String id, String name) {
+        Users user = usersRepository.findById(id);
+        user.setName(name);
+
+        return usersRepository.save(user);
     }
 
     public User getUser(String id) throws UserDoesNotExistException {
