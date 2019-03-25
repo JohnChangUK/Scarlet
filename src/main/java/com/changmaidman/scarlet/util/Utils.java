@@ -19,10 +19,9 @@ public class Utils {
                 .build();
     }
 
-    public static Match createMatch(String id, Users users) {
+    public static Match createMatch(Integer id) {
         return Match.builder()
                 .id(id)
-                .users(users)
                 .build();
     }
 }

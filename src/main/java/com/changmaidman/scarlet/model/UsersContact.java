@@ -21,12 +21,12 @@ import javax.persistence.Table;
 public class UsersContact {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String phoneNumber;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id", referencedColumnName = "id")
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private Users users;
 
     public UsersContact() {
