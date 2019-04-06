@@ -17,13 +17,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import com.changmaidman.scarlet.service.UserService;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @RestController
-@RequestMapping("/")
+@EnableWebMvc
 public class UsersController {
 
     private static final Logger log = LoggerFactory.getLogger(UsersController.class);

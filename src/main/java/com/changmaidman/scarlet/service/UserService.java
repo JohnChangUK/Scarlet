@@ -9,7 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -31,7 +35,15 @@ public class UserService {
     }
 
     public List<User> getAllUser() {
-        return usersList;
+//        return usersList;
+        Map<User, String> map = new HashMap<>();
+        List<Map.Entry<User, String>> usersList = new ArrayList<>(map.entrySet());
+        return map.entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByKey(
+                        Comparator.comparing(User::getId)))
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
     }
 
     public List<Users> getAllUsers() {

@@ -1,7 +1,7 @@
 .gradle/
-*.xml
 out/
 *.iml/
 .idea/
 build/
 src/main/resources/application.yml
+target/
